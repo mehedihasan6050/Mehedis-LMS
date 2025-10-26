@@ -81,7 +81,7 @@ export default function SignUp() {
     callbackURL: "/",
     fetchOptions: {
       onSuccess: () => {
-        toast.success("SignIn successfull!.") 
+        toast.success("Singed in with Github, you will be redirected...") 
       },
       onError: (error) => {
         toast.error(error.error.message)
@@ -95,26 +95,20 @@ export default function SignUp() {
     return (
       <div className="min-h-screen flex">
         {/* Left Section - Gradient Background */}
-        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-orange-500 via-orange-400 to-orange-600 flex-col justify-center items-center p-12 relative overflow-hidden">
-          {/* Noise/texture overlay */}
-          <div
-            className="absolute inset-0 opacity-20 mix-blend-multiply"
-            style={{
-              backgroundImage:
-                'url("data:image/svg+xml,%3Csvg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" /%3E%3C/filter%3E%3Crect width="400" height="400" filter="url(%23noiseFilter)" opacity="0.5"/%3E%3C/svg%3E")',
-            }}
-          />
+        <div className="hidden lg:flex lg:w-1/2 flex-col justify-center items-center p-12 relative overflow-hidden">
+          
+          
 
           <div className="relative z-10 text-center">
             {/* Logo */}
             <div className="mb-12">
               <div className="text-white text-5xl font-light tracking-tight">
-                <span className="inline-block mr-2">Mehedi</span>Academy
+                <span className="inline-block mr-2 text-primary font-bold">Mehedi</span>Academy
               </div>
             </div>
 
             {/* Heading */}
-            <h1 className="text-white text-4xl font-bold mb-6 leading-tight max-w-md">
+            <h1 className="text-white text-4xl font-bold mb-6 leading-tight max-w-3xl">
               Revolutionizing Education with Modern LMS Platform.
             </h1>
 
