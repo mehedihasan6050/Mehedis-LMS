@@ -11,11 +11,11 @@ import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-cllient"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { signInSchema } from "@/lib/schemas"
+import { SignInSchema } from "@/lib/schemas"
 
 
 
-type SignUpFormValues = z.infer<typeof signInSchema>
+type SignUpFormValues = z.infer<typeof SignInSchema>
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false)
@@ -25,7 +25,7 @@ export default function SignIn() {
   const router = useRouter()
 
   const form = useForm<SignUpFormValues>({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(SignInSchema),
     defaultValues: {
       email: "",
       password: "",

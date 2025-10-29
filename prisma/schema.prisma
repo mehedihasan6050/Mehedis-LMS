@@ -82,9 +82,8 @@ model Course {
   fileKey     String
   price       Int
   duration    Int
-  level       String
+  level       CourseLevel  @default(Beginner)
   category    String
-  courseLevel CourseLevel  @default(Beginner)
   slug        String       @unique
   status      CourseStatus @default(Draft)
   createdAt   DateTime     @default(now())

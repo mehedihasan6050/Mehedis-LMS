@@ -5,39 +5,61 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { categories, createCourseSchema, status } from '@/lib/schemas';
+import { categories, CourseSchema, CourseSchemaType, status } from '@/lib/schemas';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, PlusIcon, SparkleIcon } from 'lucide-react';
 import Link from 'next/link';
 import {  useForm } from 'react-hook-form';
-import * as z from "zod"
 import slugify from 'slugify';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { levels } from '@/lib/schemas';
 import Editor from '@/components/text-editor/editor';
 import Uploader from '@/components/file-uploader/uploader';
+import { tryCatch } from '@/lib/try-catch';
+import { createCourse } from '@/lib/actions';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const Create = () => {
   const [slugging, setSlugging] = useState(false);
-  const form = useForm<z.infer<typeof createCourseSchema>>({
-    resolver: zodResolver(createCourseSchema),
+  const form = useForm<CourseSchemaType>({
+    resolver: zodResolver(CourseSchema),
     defaultValues: {
       title: "",
       description: "",
       duration: 0,
       category: "Technology",
       slug: "",
-      status: "draft",
+      status: "Draft",
       fileKey: "",
-      level: "beginner",
+      level: "Beginner",
       price: 0,
     },
   })
 
+  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
-   function onSubmit(data: z.infer<typeof createCourseSchema>) {
-    // Do something with the form values.
-    console.log(data)
+
+  function onSubmit(values: CourseSchemaType) {
+     console.log(values)
+     // Do something with the form values.
+    startTransition(async () => {
+      const { data, error } = await tryCatch(createCourse(values))
+      if (error) {
+        toast.error('An Errror Ocurret On CLinet')
+        return
+      }
+
+      if (data.status === 'success') {
+        toast.success(data.message)
+        form.reset()
+        router.push('/dashboard/courses')
+      } else if (data.status === 'error') {
+        toast.error(data.message)
+      }
+
+     })
   }
 
   return (
@@ -180,7 +202,7 @@ const Create = () => {
                 <FormItem>
                   <FormLabel>Course Duration (hours)</FormLabel>
                   <FormControl>
-                    <Input placeholder='enter your course duration' {...field} />
+                    <Input placeholder='enter your course duration' {...field} type='number' onChange={(e) => field.onChange(Number(e.target.value))} />
                   </FormControl>
                 </FormItem>
               )}>
@@ -191,7 +213,7 @@ const Create = () => {
                 <FormItem>
                   <FormLabel>Course Price</FormLabel>
                   <FormControl>
-                    <Input placeholder='enter your course price' {...field} />
+                    <Input placeholder='enter your course price' {...field} type='number' onChange={(e) => field.onChange(Number(e.target.value))}/>
                   </FormControl>
                 </FormItem>
               )}>
@@ -221,7 +243,10 @@ const Create = () => {
               </FormField>
               
 
-              <Button className='w-full' type='submit'> <PlusIcon className='size-4'/> Create Course</Button>
+              <Button disabled={isPending} className='w-full' type='submit'> {isPending ? <>
+              <Loader2 className='size-4 animate-spin'/> Loading...
+              </> : <>
+              <PlusIcon className='size-4' /> Create Course</>}</Button>
           </form>
           </Form>
       </CardContent>

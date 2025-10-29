@@ -1,5 +1,5 @@
 import { env } from "@/lib/env"
-import { uploadFileSchema } from "@/lib/schemas"
+import { UploadFileSchema } from "@/lib/schemas"
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { NextResponse } from "next/server"
 import { v4 as uuidv4 } from 'uuid';
@@ -9,7 +9,7 @@ import { S3 } from "@/lib/S3Client";
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const validation = uploadFileSchema.safeParse(body)
+    const validation = UploadFileSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json({error: validation.error}, {status: 400})
     }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
   
     return NextResponse.json({ presignedUrl, key: uniqueKey })
-  } catch (error) {
+  } catch {
     return NextResponse.json({error: "Internal Server Error"}, {status: 500})
   }
 }

@@ -12,11 +12,11 @@ import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-cllient"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
-import { signUpSchema } from "@/lib/schemas"
+import { SignUpSchema } from "@/lib/schemas"
 
 
 
-type SignUpFormValues = z.infer<typeof signUpSchema>
+type SignUpFormValues = z.infer<typeof SignUpSchema>
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false)
@@ -26,7 +26,7 @@ export default function SignUp() {
   const router = useRouter()
 
   const form = useForm<SignUpFormValues>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(SignUpSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
