@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import { categories, createCourseSchema, status } from '@/lib/schemas';
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, PlusIcon, SparkleIcon } from 'lucide-react';
@@ -16,6 +15,7 @@ import slugify from 'slugify';
 import { useState } from 'react';
 import { levels } from '@/lib/schemas';
 import Editor from '@/components/text-editor/editor';
+import Uploader from '@/components/file-uploader/uploader';
 
 const Create = () => {
   const [slugging, setSlugging] = useState(false);
@@ -33,6 +33,13 @@ const Create = () => {
       price: 0,
     },
   })
+
+
+   function onSubmit(data: z.infer<typeof createCourseSchema>) {
+    // Do something with the form values.
+    console.log(data)
+  }
+
   return (
     <div>
       <div className='my-4 flex items-center justify-between'>
@@ -51,7 +58,7 @@ const Create = () => {
       <CardContent>
        
            <Form {...form}>
-               <form className='space-y-8'>
+               <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
               <FormField control={form.control} name='title' render={({field}) => (
                 <FormItem>
                   <FormLabel>Title</FormLabel>
@@ -115,7 +122,7 @@ const Create = () => {
                 <FormItem>
                   <FormLabel>Thumbnail image</FormLabel>
                   <FormControl>
-                    <Input placeholder='enter your Thumbnail url' {...field} />
+                   <Uploader value={field.value} onChange={field.onChange}/>
                   </FormControl>
                 </FormItem>
               )}>

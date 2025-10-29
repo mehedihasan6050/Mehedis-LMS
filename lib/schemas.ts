@@ -1,4 +1,3 @@
-import { title } from "process"
 import { z } from "zod"
 
 export const signUpSchema = z.object({
@@ -30,4 +29,14 @@ export const createCourseSchema = z.object({
   fileKey: z.string().min(1, "File key is required"),
   level: z.enum(levels, { message: "Invalid level" }),
   price: z.coerce.number().min(0, "Price must be at least 0"),
+})
+
+
+
+// server side validation schemas
+export const uploadFileSchema = z.object({
+  fileName: z.string().min(1, {message: "File name is required"}),
+  contentType: z.string().min(1, { message: "Content type is required" }),
+  size: z.number().min(1, { message: "File size must be at least 1 byte" }),
+  isImage: z.boolean()
 })
